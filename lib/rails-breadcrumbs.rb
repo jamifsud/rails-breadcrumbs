@@ -24,16 +24,15 @@ module Rails
           @add_resource_breadcrumb = true
         end
       end
-     
+
       # Automatically add the resource crumb
       def render(*args)
         # Automatically add the resource breadcrumb
         if @add_resource_breadcrumb
-          logger.info "YOBRO"
           resource = self.controller_name.singularize
           if self.instance_variables.include? "@#{resource}".to_sym
             resource_instance = self.instance_variable_get("@#{resource}")
-            
+
             if resource_instance.new_record?
               add_breadcrumb "New #{resource.titleize}", ''
             else
@@ -53,7 +52,7 @@ module Rails
       # :type      => :bootstrap  (Twitter Bootstrap compatible version)
       #
       #               :list       (Basic <ul><li></li></ul>)
-      #               :links      (Links separated with separator) 
+      #               :links      (Links separated with separator)
       # :class     => Class to assign to the ul for :type = :list
       # :separator => String representing the separator (ignored if :type => :bootstrap)
       # :li_class  => Class to add to li
@@ -71,19 +70,19 @@ module Rails
         options[:type] = :links unless options[:type]
         options[:class] = '' unless options[:class]
         options[:li_class] = '' unless options[:li_class]
-       
+
         # Assemble the array of breadcrumbs
         breadcrumb_array = @breadcrumbs.map do |txt, path|
           front_wrap = (options[:type] == :links) ? '' : '<li>';
           end_wrap = (options[:type] == :links) ? '' : '</li>';
 
           if options[:type] == :bootstrap
-            li_class = (path.blank? || current_page?(path)) ? 'active' : '' 
+            li_class = (path.blank? || current_page?(path)) ? 'active' : ''
             end_wrap = (path.blank? || current_page?(path)) ? end_wrap : "<span class='divider'>/</span></li>"
-          else 
+          else
             li_class = options[:li_class]
           end
-          
+
           "#{front_wrap}#{link_to_unless (path.blank? || current_page?(path)), h(txt), path}#{end_wrap}"
         end
 
