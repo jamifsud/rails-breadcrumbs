@@ -10,6 +10,7 @@ module Rails
       def add_breadcrumb(name, url = '')
         @breadcrumbs ||= []
         url = send(url) if url.is_a?(Symbol)
+        url = url.call if url.is_a?(Proc)
         @breadcrumbs << [name, url]
       end
 
